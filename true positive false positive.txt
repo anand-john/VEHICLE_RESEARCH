@@ -1,0 +1,46 @@
+import pytesseract
+from PIL import Image
+import cv2
+import numpy as np
+
+# Define the image path
+image_path = 'runs/train/exp/confusion_matrix.png'
+
+# Load the image using OpenCV
+image = cv2.imread(image_path)
+
+# Preprocess the image (optional, but often improves OCR accuracy)
+gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+# Apply a slight blur and thresholding to improve character recognition
+blurred_image = cv2.medianBlur(gray_image, 3)
+_, thresholded_image = cv2.threshold(blurred_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+# Use Tesseract to extract text from the preprocessed image
+# Use config='--psm 6' to treat the image as a single block of text and digits only mode
+# The 'digits' configuration helps in recognizing numbers better
+custom_config = r'--psm 6 outputbase digits' 
+extracted_text = pytesseract.image_to_string(thresholded_image, config=custom_config)
+
+# Clean and interpret the extracted text
+# OCR on a matrix image might return all numbers in sequence.
+# Assuming a standard 2x2 confusion matrix (TP, FP, FN, TN) extracted sequentially:
+# TP is the first number extracted.
+
+# Filter out non-digit characters and split into potential numbers
+numbers = [int(d) for d in extracted_text.split() if d.isdigit()]
+
+if numbers:
+    true_positive = numbers[0]
+    print(f"Extracted Numbers: {numbers}")
+    print(f"The True Positive (TP) value is: {true_positive}")
+    false_positive = numbers[1]
+    print(f"Extracted Numbers: {numbers}")
+    print(f"The False Positive (FP) value is: {false_positive}")
+    false_negative = numbers[2]
+    print(f"Extracted Numbers: {numbers}")
+    print(f"The False Negative (FN) value is: {false_negative}")
+    true_negative = numbers[3]
+    print(f"Extracted Numbers: {numbers}")
+    print(f"The True Negative (TN) value is: {true_negative}")
+else:
+    print("Could not extract any numbers. OCR may have failed. Consider adjusting image preprocessing.")
