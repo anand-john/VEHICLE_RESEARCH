@@ -1,0 +1,7 @@
+pip install "numpy<1.24.0"
+or
+pip install "numpy==1.26.0"
+
+
+
+run_id = torch.load(weights, map_location=device, weights_only=False).get('wandb_id') if weights.endswith('.pt') and os.path.isfile(weights) else None

@@ -1,0 +1,1 @@
+!python tools/eval.py --data custom.yaml --img-size 416 --weights runs/train/exp/weights/best_ckpt.pt --device 0 --do_pr_metric True --plot_confusion_matrix --plot_curve True
