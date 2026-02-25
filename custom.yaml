@@ -1,0 +1,12 @@
+# YOLOv5 🚀 by Ultralytics, GPL-3.0 license
+
+train: ../../../content/drive/MyDrive/cus/images/train  # train images (relative to 'path') 128 images
+val: ../../../content/drive/MyDrive/cus/images/val  # val images (relative to 'path') 128 images
+
+# 0 - bicycle, 1- car, 2 - motorcycle, 3 - bus, 4 - truck
+# Classes
+nc: 5  # number of classes
+names: ['bicycle', 'car', 'motorcycle', 'bus', 'truck']  # class names
+
+
+
